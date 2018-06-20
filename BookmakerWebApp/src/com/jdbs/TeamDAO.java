@@ -1,47 +1,162 @@
-package com.dao;
+package com.jdbs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.base_type.Team;
+import com.domain.Team;
+import com.jdbs.interfaces.GenericDao;
+import com.jdbs.oracledb.OracleConnector;
 
-public class TeamDAO implements IDao<Team>{
-
-	@Override
-	public void insert(Team name, Connection conn) throws Exception {
-		String sql = "INSERT INTO TEAMS(TEAMID, TEAMNAME)"
-				+ "VALUES(SQ_ORDIN_TYPE.NEXTVAL, ?)";
-		
-		PreparedStatement pStm = conn.prepareStatement(sql);
-		pStm.setString(1, name.getNameTeam());
-		pStm.execute();
-		pStm.close();
-	}
-
-	//TODO: TRASH METHOD ????
-	@Override
-	public Team find(int id, Connection conn) throws Exception {		
-//		String sql = "SELECT * FROM TYPE_SPORT WHERE TYPEID = ?";		
-		return null;
-	}
+public class TeamDAO implements GenericDao<Team, Integer>{
 
 	@Override
-	public List<Team> select(Connection conn) throws Exception {
+	public boolean insert(Team object) {
+
+		String sql = "INSERT INTO TEAMS(TYPEID, TEAMNAME)"
+				+ "VALUES(SQ_TEAMS.NEXTVAL, ?)";
 		
-		String sql = "SELECT * FROM TEAMS";
-		PreparedStatement pStm = conn.prepareStatement(sql);
-		ResultSet result = pStm.executeQuery();
-		List<Team > list = new ArrayList<Team>();
-		
-		while(result.next()) {
-			Team t = new Team(result.getString("TEAMNAME"));
-			t.setId(result.getInt("TEAMID"));
-			list.add(t);
+		Connection connection = null;
+		PreparedStatement statement = null;
+		boolean result = false;
+		try{
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, object.getNameTeam());
+			result = statement.execute();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(connection != null)
+				try {
+					if(connection != null) connection.close();
+					if(statement != null) statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 		}
+		return result;
+	}
+
+	@Override
+	public void update(Team object) {
+		String sql = "UPDATE TEAMS SET "
+					+ "TEAMNAME=? "
+					+ "WHERE TYPEID=?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, object.getNameTeam());
+			statement.execute();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}	
+	}
+
+	@Override
+	public void delete(Team object) {
+		String sql = "DELETE FROM TEAMS WHERE TYPEID=?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;		
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, object.getId());
+			statement.execute();			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {			
+			try {
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}		
+	} 	
+
+	@Override
+	public List<Team> getAll() {		
+		String sql = "SELECT * FROM TEAMS";
+
+		List<Team> list = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result  = null;
+		
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			result = statement.executeQuery();		
+			list = parseResultSet(result);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {				
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();			
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}	
 		
 		return list;
+	}
+
+	private List<Team> parseResultSet(ResultSet result){
+		List<Team> list = new ArrayList<Team>();
+		try {
+			while(result.next()) {
+				Team type = new Team(result.getString("TEAMNAME"));
+				type.setId(result.getInt("TEAMID"));
+				list.add(type);				
+			}			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public Team getByKey(Integer object) {
+		String sql = "SELECT * FROM TEAMS";
+
+		Team type = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result  = null;
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			result = statement.executeQuery();		
+			type = parseResultSet(result).get(0);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {				
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();			
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return type;
 	}
 }

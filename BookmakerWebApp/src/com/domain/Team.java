@@ -1,14 +1,21 @@
-package com.base_type;
+package com.domain;
 
-public class Team {
-	private int id;
+import com.jdbs.interfaces.Identified;
+
+public class Team implements Identified<Integer>{
+	private Integer id;
 	private String nameTeam;
 	
 	public Team(String nameTeam) {
 		this.nameTeam = nameTeam;
 	}
 
-	public int getId() {
+	@Override
+	public String toString() {
+		return id + " " + nameTeam;
+	}
+	
+	public Integer getId() {
 		return id;
 	}
 

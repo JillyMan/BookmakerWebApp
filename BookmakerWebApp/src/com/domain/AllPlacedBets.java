@@ -1,27 +1,32 @@
-package com.base_type;
+package com.domain;
 
-public class PlacedBets {
-	private User user;
-	private Event event;
+public class AllPlacedBets {
 	private int summa;
+	private Integer userId;
+	private Integer betsId;
 	
-	public PlacedBets(User user, Event event, int summa) {
-		this.user = user;
-		this.event = event;
+	public AllPlacedBets(Integer  userid, Integer betsid, int summa) {
+		this.userId = userid;
+		this.betsId = betsid;
 		this.summa = summa;
 	}
 	
-	public User getUser() {
-		return user;
+	@Override
+	public String toString() {
+		return userId + " " + betsId + " " + summa;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	
+	public Integer getUserId() {
+		return userId;
 	}
-	public Event getEvent() {
-		return event;
+	public void setUser(Integer userid) {
+		this.userId = userid;
 	}
-	public void setEvent(Event event) {
-		this.event = event;
+	public Integer getBetsId() {
+		return betsId;
+	}
+	public void setBetsId(Integer event) {
+		this.betsId = event;
 	}
 	public int getSumma() {
 		return summa;
@@ -29,7 +34,4 @@ public class PlacedBets {
 	public void setSumma(int summa) {
 		this.summa = summa;
 	}
-	
-	
-	
 }

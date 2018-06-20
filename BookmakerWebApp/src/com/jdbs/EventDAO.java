@@ -7,17 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.domain.TypeSport;
+import com.domain.Event;
 import com.jdbs.interfaces.GenericDao;
 import com.jdbs.oracledb.OracleConnector;
 
-public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
-
+public class EventDAO implements GenericDao<Event, Integer>{
 	@Override
-	public boolean insert(TypeSport object) {
+	public boolean insert(Event object) {
 
-		String sql = "INSERT INTO TYPE_SPORT(TYPEID, TYPE_NAME)"
-				+ "VALUES(SQ_TYPE_SPORT.NEXTVAL, ?)";
+		String sql = "INSERT INTO EVENT(EVENTID, NAME_EVENT, DATETIME_EVENT, TPYE_SPORTID)"
+				+ "VALUES(SQ_EVENT.NEXTVAL, ?, ?, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -25,27 +24,30 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, object.getTypeName());
+			statement.setString(1, object.getNameEvent());
+			statement.setTimestamp(2, object.getTimestamp());
+			statement.setInt(3, object.getTypeSportId());			
 			result = statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			if(connection != null)
-				try {
-					if(connection != null) connection.close();
-					if(statement != null) statement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			try {
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return result;
 	}
 
 	@Override
-	public void update(TypeSport object) {
-		String sql = "UPDATE TYPE_SPORT SET "
-					+ "TYPE_NAME =? "
-					+ "WHERE TYPEID=?";
+	public void update(Event object) {
+		String sql = "UPDATE EVENT SET "
+					+ "NAME_EVENT=? "
+					+ "TYPE_SPORTID=?"
+					+ "DATETIME_EVENT=?"
+					+ "WHERE EVENTID=?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -53,7 +55,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, object.getTypeName());
+			statement.setString(1, object.getNameEvent());
+			statement.setInt(2, object.getTypeSportId());
+			statement.setTimestamp(3, object.getTimestamp());
+			statement.setInt(4, object.getId());			
 			statement.execute();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -66,10 +71,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 			}
 		}	
 	}
-
+	
 	@Override
-	public void delete(TypeSport object) {
-		String sql = "DELETE FROM TYPE_SPORT WHERE TPYEID=?";		
+	public void delete(Event object) {
+		String sql = "DELETE FROM EVENT WHERE EVENTID=?";		
 		Connection connection = null;
 		PreparedStatement statement = null;
 		
@@ -91,10 +96,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	} 	
 
 	@Override
-	public List<TypeSport> getAll() {		
-		String sql = "SELECT * FROM TYPE_SPORT";
+	public List<Event> getAll() {		
+		String sql = "SELECT * FROM EVENT";
 
-		List<TypeSport> list = null;
+		List<Event> list = null;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result  = null;
@@ -118,12 +123,15 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		return list;
 	}
 
-	private List<TypeSport> parseResultSet(ResultSet result){
-		List<TypeSport> list = new ArrayList<TypeSport>();
+	private List<Event> parseResultSet(ResultSet result){
+		List<Event> list = new ArrayList<Event>();
 		try {
 			while(result.next()) {
-				TypeSport type = new TypeSport(result.getString("TYPE_NAME"));
-				type.setId(result.getInt("TYPEID"));
+				Event type = new Event(
+						result.getString("NAME_EVENT"), 
+						result.getTimestamp("DATETIME_EVENT"), 
+						result.getInt("TYPE_SPORTID"));
+				type.setId(result.getInt("EVENTID"));
 				list.add(type);				
 			}			
 		}catch(SQLException e) {
@@ -133,10 +141,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	}
 	
 	@Override
-	public TypeSport getByKey(Integer object) {
-		String sql = "SELECT * FROM TYPE_SPORT";
+	public Event getByKey(Integer object) {
+		String sql = "SELECT * FROM EVENT";
 
-		TypeSport type = null;
+		Event type = null;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result  = null;

@@ -1,10 +1,12 @@
-package com.dao;
+package com.jdbs.interfaces;
 
-import java.sql.Connection;
 import java.util.List;
 
-public interface IDao<Type> {
-	public void insert(Type name, Connection conn) throws Exception;
-	public Type find(int id, Connection conn) throws Exception;
-	public List<Type> select(Connection conn) throws Exception;
+public interface GenericDao<Type, PK> {
+	public boolean insert(Type object);
+	public void update(Type object);
+	public void delete(Type object);
+
+	public List<Type> getAll();	
+	public Type getByKey(PK object);
 }

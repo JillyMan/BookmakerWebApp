@@ -1,20 +1,28 @@
-package com.base_type;
+package com.domain;
 
-public class SpecificationBet {
-	private int id;
-	private TypeBets typebets;
+import com.domain.enums.StatusBets;
+import com.jdbs.interfaces.Identified;
+
+public class SpecificationBet implements Identified<Integer>{
+	private Integer id;
+	private Integer typebetsId;
 	private double coefficient;
-	private int result;
-	private Event event;
+	private StatusBets result;
+	private Integer eventId;
 	
-	public SpecificationBet (TypeBets typebets, double coefficient, int result, Event event) {
-		this.typebets = typebets;
+	public SpecificationBet (Integer typebetsid, double coefficient, StatusBets result, Integer eventid) {
+		this.typebetsId = typebetsid;
 		this.coefficient = coefficient;
 		this.result = result;
-		this.event = event;
+		this.eventId = eventid;
 	}
 
-	public int getId() {
+	@Override
+	public String toString() {
+		return id + " " +  typebetsId + " " + coefficient +  " " + result + " " + eventId;
+	}
+	
+	public Integer getId() {
 		return id;
 	}
 
@@ -22,12 +30,12 @@ public class SpecificationBet {
 		this.id = id;
 	}
 
-	public TypeBets getTypebets() {
-		return typebets;
+	public Integer getTypeBetsId() {
+		return typebetsId;
 	}
 
-	public void setTypebets(TypeBets typebets) {
-		this.typebets = typebets;
+	public void setTypeBetsId(Integer typebetsid) {
+		this.typebetsId = typebetsid;
 	}
 
 	public double getCoefficient() {
@@ -38,19 +46,19 @@ public class SpecificationBet {
 		this.coefficient = coefficient;
 	}
 
-	public int getResult() {
+	public StatusBets getResult() {
 		return result;
 	}
 
-	public void setResult(int result) {
+	public void setResult(StatusBets result) {
 		this.result = result;
 	}
 
-	public Event getEvent() {
-		return event;
+	public Integer getEventId() {
+		return eventId;
 	}
 
-	public void setEvent(Event event) {
-		this.event = event;
+	public void setEventId(Integer eventid) {
+		this.eventId = eventid;
 	}
 }	

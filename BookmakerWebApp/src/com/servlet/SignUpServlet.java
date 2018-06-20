@@ -8,21 +8,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class LogoutServlet extends HttpServlet {
+public class SignUpServlet extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-					
+			throws ServletException, IOException {				
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 		
-		String login = (String)session.getAttribute("login");
-		String password = (String)session.getAttribute("password");
-		
+		String fname = (String)request.getAttribute("fname");
+		String lname = (String)request.getAttribute("lname");
+		String login = (String)request.getAttribute("login");
+		String password = (String)request.getAttribute("password");	
+
 		
 		
 		response.sendRedirect("/home");

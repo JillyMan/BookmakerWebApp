@@ -1,27 +1,18 @@
-package com.base_type;
+package com.domain.enums;
 
 public enum Role {
-	USER,
-	BOOKMAKER,
-	ADMIN,
-	UNKNOWN;
+	USER(1),
+	ADMIN(2),
+	BOOKMAKER(3),
+	UNKNOWN(4);
+	
+	private final int value;
 
-	public static Role toRole(int num) {
-		Role role = null;
-		switch(num) {
-			case 1:{
-				role = USER;
-			}break;
-			case 2:{
-				role = ADMIN; 				
-			}break;
-			case 3:{
-				role = BOOKMAKER; 				
-			}break;
-			default:
-				role = UNKNOWN;
-				break;
-		}
-		return role;
-	}	
+	Role(int val){
+		value = val;
+	}
+	
+	public int getInt() {
+		return value;
+	}
 }

@@ -17,16 +17,6 @@
 	</servlet-mapping>
 
 	<servlet>
-	    <servlet-name>Registry</servlet-name>
-	    <servlet-class>servlet.Registration</servlet-class>
- 	</servlet>
-  
-	<servlet-mapping>
-	    <servlet-name>Registry</servlet-name>
-	    <url-pattern>/reg</url-pattern>
- 	</servlet-mapping>
-
-	<servlet>
 	    <servlet-name>SignIn</servlet-name>
 	    <servlet-class>servlet.SignIn</servlet-class>
  	</servlet>

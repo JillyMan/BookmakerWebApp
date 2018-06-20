@@ -1,20 +1,34 @@
-package com.base_type;
+package com.domain;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import com.jdbs.interfaces.Identified;
 
-public class Event {
-	private int id;
+public class Event implements Identified<Integer> {
+	private Integer id;
 	private String nameEvent;
-	private Date date;
-	private TypeSport typeSport;
+	private Timestamp timestamp;
+	private Integer typeSportId;
 	
-	public Event(String nameEvent, Date date, TypeSport typeSport) {
+	public Event(String nameEvent, Timestamp timestamp, Integer typeSportid) {
 		this.nameEvent = nameEvent;
-		this.date = date;
-		this.typeSport = typeSport;
+		this.timestamp = timestamp;
+		this.typeSportId = typeSportid;
 	}
 
-	public int getId() {
+	@Override
+	public String toString() {
+		return id + " " + nameEvent + " " + timestamp.toString() + " " + typeSportId;
+	}
+	
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+	
+	public void setTimestamp(Timestamp time) {
+		this.timestamp = time;
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
@@ -30,19 +44,11 @@ public class Event {
 		this.nameEvent = nameEvent;
 	}
 
-	public Date getDate() {
-		return date;
+	public Integer getTypeSportId() {
+		return typeSportId;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public TypeSport getTypeSport() {
-		return typeSport;
-	}
-
-	public void setTypeSport(TypeSport typeSport) {
-		this.typeSport = typeSport;
+	public void setTypeSportId(Integer typeSportid) {
+		this.typeSportId = typeSportid;
 	}	
 }

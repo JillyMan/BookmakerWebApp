@@ -1,38 +1,33 @@
-package com.base_type;
+package com.domain;
 
 public class Contest {
-	private int id;
-	private Event event;
-	private Team team;
+	private Integer eventId;
+	private Integer teamId;
+
+	@Override
+	public String toString() {
+		return eventId + " " + teamId;
+	}
 	
-	public Contest(int id, Event event, Team team) {
+	public Integer getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(Integer event) {
+		this.eventId = event;
+	}
+
+	public Integer getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(Integer teamid) {
+		this.teamId = teamid;
+	}
+
+	public Contest(Integer eventid, Integer teamid) {
 		super();
-		this.id = id;
-		this.event = event;
-		this.team = team;
+		this.eventId = eventid;
+		this.teamId = teamid;
 	}
-
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public Event getEvent() {
-		return event;
-	}
-
-	public void setEvent(Event event) {
-		this.event = event;
-	}
-	
-	public Team getTeam() {
-		return team;
-	}
-	
-	public void setTeam(Team team) {
-		this.team = team;
-	}	
 }

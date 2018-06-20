@@ -1,14 +1,21 @@
-package com.base_type;
+package com.domain;
 
-public class TypeBets {
-	private int id;
+import com.jdbs.interfaces.Identified;
+
+public class TypeBets implements Identified<Integer>{
+	private Integer id;
 	private String typeName;
 	
 	public TypeBets(String typeName) {
 		this.typeName = typeName;
 	}
 	
-	public int getId() {
+	@Override
+	public String toString() {
+		return id + " " + typeName;
+	}
+	
+	public Integer getId() {
 		return id;
 	}
 	

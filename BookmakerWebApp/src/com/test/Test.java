@@ -1,40 +1,104 @@
-package com;
+package com.test;
 
 import java.util.List;
 import java.sql.Connection;
-import com.dao.*;
-import com.base_type.*;
-import com.connector.ConnectorToDB;
 
-public class test {
-	public static void main(String[] args) throws Exception {
-		Connection conn = ConnectorToDB.getInstatnce().getConnection("artyomRoot", "toor");		 
-		
-		TeamDAO td = new TeamDAO();
-		List<Team> list = td.select(conn);
-		
-		for(Team t: list) {
-			System.out.println(t.getId() + t.getNameTeam());
-		}	
-		
-		/*TypeSportDAO tsd = new TypeSportDAO();
-		TypeBetsDAO tbd = new TypeBetsDAO();
-		List<TypeBets> list = tbd.select(conn);
-		
-		for(TypeBets ts : list) {
-			System.out.println(ts.getId() + ts.getTypeName());
-		}	
-		List<TypeSport> list = tsd.select(conn);
-		
-		for(TypeSport ts : list) {
-			System.out.println(ts.getId() + ts.getTypeName());
-		}	
+import com.domain.*;
+import com.domain.enums.Role;
+import com.jdbs.*;
+import com.jdbs.interfaces.GenericDao;
 
-		UserDAO userDao = new UserDAO();		
-		List<User> list = userDao.select(conn);		
+public class Test {
+
+	public void users() {
+		UserDAO dao = new UserDAO();
 		
-		for(User user : list) {
-			System.out.println(user.toString());
-		} */	
+		List<User> list = dao.getAll();
+		User u = list.get(list.size() - 1);
+		dao.delete(u);
+		list = dao.getAll();
+
+		for(User l : list) {
+			System.out.println(l.toString());
+		}
+		
+		u = dao.getByKey("test9");
+		System.out.println(u.toString());
 	}
+	
+	public void typeSport() {
+		TypeSportDAO dao = new TypeSportDAO();
+		List<TypeSport> list = dao.getAll();
+		
+		for(TypeSport l : list) {
+			System.out.println(l.toString());
+		}		
+	}
+
+	public void typeBets() {
+		TypeBetsDAO dao = new TypeBetsDAO();
+		List<TypeBets> list = dao.getAll();
+		
+		for(TypeBets l : list) {
+			System.out.println(l.toString());
+		}		
+	}
+
+	public void typeTeam() {
+		TeamDAO dao = new TeamDAO();
+		List<Team> list = dao.getAll();
+		
+		for(Team l : list) {
+			System.out.println(l.toString());
+		}		
+	}	
+
+	public void testSpecificationBet() {
+		SpecificationBetDAO dao = new SpecificationBetDAO();
+		List<SpecificationBet> list = dao.getAll();
+		
+		for(SpecificationBet l : list) {
+			System.out.println(l.toString());
+		}		
+	}	
+	
+	public void testEvent() {
+		EventDAO dao = new EventDAO();
+		List<Event> list = dao.getAll();
+		
+		for(Event l : list) {
+			System.out.println(l.toString());
+		}		
+	}	
+	
+	public void testContest() {
+		ContestDAO dao = new ContestDAO();
+		List<Contest> list = dao.getAll();
+		
+		for(Contest l : list) {
+			System.out.println(l.toString());
+		}		
+	}	
+	
+	public void testAllPlacedBets() {
+		AllPlacedBetsDAO dao = new AllPlacedBetsDAO();
+		List<AllPlacedBets> list = dao.getAll();
+		
+		for(AllPlacedBets l : list) {
+			System.out.println(l.toString());
+		}		
+	}	
+	
+	public static void main(String[] args) throws Exception {
+		Test test = new Test();		
+		test.users();
+		//test.typeSport();		
+		//test.typeBets();
+		//test.typeTeam();
+		//test.SpecificationBet();
+		//test.testEvent();
+		//test.testContest();
+		//test.testAllPlacedBets();
+
+	}	
 }

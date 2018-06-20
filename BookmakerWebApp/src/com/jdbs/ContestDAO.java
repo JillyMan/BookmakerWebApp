@@ -7,17 +7,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.domain.TypeSport;
+import com.domain.Contest;
 import com.jdbs.interfaces.GenericDao;
 import com.jdbs.oracledb.OracleConnector;
 
-public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
-
+public class ContestDAO implements GenericDao<Contest, Integer>{
+	
 	@Override
-	public boolean insert(TypeSport object) {
+	public boolean insert(Contest object) {
 
-		String sql = "INSERT INTO TYPE_SPORT(TYPEID, TYPE_NAME)"
-				+ "VALUES(SQ_TYPE_SPORT.NEXTVAL, ?)";
+		String sql = "INSERT INTO CONTEST(EVENTID, TEAMID)"
+				+ "VALUES(?, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -25,7 +25,8 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, object.getTypeName());
+			statement.setInt(1, object.getEventId());
+			statement.setInt(2, object.getTeamId());
 			result = statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -42,10 +43,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	}
 
 	@Override
-	public void update(TypeSport object) {
-		String sql = "UPDATE TYPE_SPORT SET "
-					+ "TYPE_NAME =? "
-					+ "WHERE TYPEID=?";
+	public void update(Contest object) {
+		String sql = "UPDATE CONTEST SET "
+					+ "TEAMID=? "
+					+ "WHERE EVENTID=?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -53,7 +54,8 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, object.getTypeName());
+			statement.setInt(1, object.getEventId());
+			statement.setInt(2, object.getTeamId());
 			statement.execute();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -68,15 +70,15 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	}
 
 	@Override
-	public void delete(TypeSport object) {
-		String sql = "DELETE FROM TYPE_SPORT WHERE TPYEID=?";		
+	public void delete(Contest object) {
+		String sql = "DELETE FROM CONTEST WHERE EVENTID=? ";		
 		Connection connection = null;
 		PreparedStatement statement = null;
 		
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, object.getId());
+			statement.setInt(1, object.getEventId());
 			statement.execute();			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -91,10 +93,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	} 	
 
 	@Override
-	public List<TypeSport> getAll() {		
-		String sql = "SELECT * FROM TYPE_SPORT";
+	public List<Contest> getAll() {		
+		String sql = "SELECT * FROM CONTEST";
 
-		List<TypeSport> list = null;
+		List<Contest> list = null;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result  = null;
@@ -118,12 +120,13 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		return list;
 	}
 
-	private List<TypeSport> parseResultSet(ResultSet result){
-		List<TypeSport> list = new ArrayList<TypeSport>();
+	private List<Contest> parseResultSet(ResultSet result){
+		List<Contest> list = new ArrayList<Contest>();
 		try {
 			while(result.next()) {
-				TypeSport type = new TypeSport(result.getString("TYPE_NAME"));
-				type.setId(result.getInt("TYPEID"));
+				Contest type = new Contest(
+						result.getInt("EVENTID"), 
+						result.getInt("TEAMID"));
 				list.add(type);				
 			}			
 		}catch(SQLException e) {
@@ -133,10 +136,10 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	}
 	
 	@Override
-	public TypeSport getByKey(Integer object) {
-		String sql = "SELECT * FROM TYPE_SPORT";
+	public Contest getByKey(Integer object) {
+		String sql = "SELECT * FROM CONTEST";
 
-		TypeSport type = null;
+		Contest type = null;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result  = null;

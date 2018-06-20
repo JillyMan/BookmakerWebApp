@@ -1,23 +1,26 @@
-package com.base_type;
+package com.domain;
 
-public class User {
+import com.domain.enums.Role;
+import com.jdbs.interfaces.Identified;
+
+public class User implements Identified<Integer>{
 	private int id;
 	private int score;
 	private String firstName;
 	private String lastName;
 	private String login;
 	private String password;
-	private Role role;
+	private int role;
 	
 	public User() {}
 	
-	public User(String fName, String lName, int score, String login, String password, Role role) {
+	public User(String fName, String lName, String login, String password) {
 		this.firstName = fName;
 		this.lastName = lName;
-		this.score = score;
+		this.score = 0;
 		this.login = login;
 		this.password = password;
-		this.role = role;
+		this.role = Role.USER.getInt();		
 	}
 
 	@Override
@@ -25,11 +28,11 @@ public class User {
 		return id + " " + firstName + " " + lastName + " " + score + " " + login + " " + password + " " + role;
 	}
 	
-	public Role getRole() {
+	public int  getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 
@@ -49,7 +52,7 @@ public class User {
 		this.password = password;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
