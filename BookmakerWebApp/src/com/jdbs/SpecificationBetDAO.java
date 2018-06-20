@@ -15,13 +15,12 @@ import com.jdbs.oracledb.OracleConnector;
 public class SpecificationBetDAO implements GenericDao<SpecificationBet, Integer>{
 
 	@Override
-	public boolean insert(SpecificationBet object) {
+	public void insert(SpecificationBet object) {
 		
 		String sql = "INSERT INTO SPEC_BETS(SPEC_BETSID, TYPE_BETSID, COEFFICIENT, RESULT, EVENTID)"
-				+ "VALUES(SQ_ORDIN_TYPE, ?, ?, ?, ?)";
+				+ "VALUES(SQ_ORDIN_TYPE.NEXTVAL, ?, ?, ?, ?)";
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		
 		try {			
 			connection = OracleConnector.getInstance().getConnection();
@@ -30,7 +29,7 @@ public class SpecificationBetDAO implements GenericDao<SpecificationBet, Integer
 			statement.setDouble(2, object.getCoefficient());
 			statement.setInt(3, object.getResult().getInt());			
 			statement.setInt(4, object.getEventId());
-			result = statement.execute();			
+			statement.execute();			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -41,8 +40,6 @@ public class SpecificationBetDAO implements GenericDao<SpecificationBet, Integer
 				e.printStackTrace();
 			}
 		}
-		
-		return result;
 	}
 
 	@Override
@@ -141,6 +138,7 @@ public class SpecificationBetDAO implements GenericDao<SpecificationBet, Integer
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
+			statement.setInt(1, key);
 			result = statement.executeQuery();
 			bet = parseResultSet(result).get(0);
 			

@@ -14,19 +14,18 @@ import com.jdbs.oracledb.OracleConnector;
 public class TypeBetsDAO implements GenericDao<TypeBets, Integer>{
 
 	@Override
-	public boolean insert(TypeBets object) {
+	public void insert(TypeBets object) {
 
-		String sql = "INSERT INTO TYPE_SPORT(TYPEID, NAME_BETS)"
+		String sql = "INSERT INTO TYPE_BETS(TYPEID, NAME_BETS)"
 				+ "VALUES(SQ_ORDIN_TYPE.NEXTVAL, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, object.getTypeName());
-			result = statement.execute();
+			statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -38,7 +37,6 @@ public class TypeBetsDAO implements GenericDao<TypeBets, Integer>{
 					e.printStackTrace();
 				}
 		}
-		return result;
 	}
 
 	@Override
@@ -135,7 +133,7 @@ public class TypeBetsDAO implements GenericDao<TypeBets, Integer>{
 	
 	@Override
 	public TypeBets getByKey(Integer object) {
-		String sql = "SELECT * FROM TYPE_BETS";
+		String sql = "SELECT * FROM TYPE_BETS WHERE TYPEID=?";
 
 		TypeBets type = null;
 		Connection connection = null;
@@ -144,6 +142,7 @@ public class TypeBetsDAO implements GenericDao<TypeBets, Integer>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
+			statement.setInt(1, object);
 			result = statement.executeQuery();		
 			type = parseResultSet(result).get(0);
 		} catch(SQLException e) {

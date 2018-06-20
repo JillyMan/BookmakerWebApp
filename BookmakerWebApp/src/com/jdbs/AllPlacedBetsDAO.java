@@ -13,21 +13,20 @@ import com.jdbs.oracledb.OracleConnector;
 
 public class AllPlacedBetsDAO implements GenericDao<AllPlacedBets, Integer>{
 	@Override
-	public boolean insert(AllPlacedBets object) {
+	public void insert(AllPlacedBets object) {
 		String sql = "INSERT INTO ALL_BETS_PLACED_USERS("
 				+ "USERID, BETSID, SUMMA)"
 				+ "VALUES(?, ?, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, object.getUserId());
 			statement.setInt(2, object.getBetsId());
 			statement.setInt(3, object.getSumma());			
-			result = statement.execute();
+			statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -38,7 +37,6 @@ public class AllPlacedBetsDAO implements GenericDao<AllPlacedBets, Integer>{
 				e.printStackTrace();
 			}
 		}
-		return result;
 	}
 
 	@Override

@@ -13,21 +13,20 @@ import com.jdbs.oracledb.OracleConnector;
 
 public class EventDAO implements GenericDao<Event, Integer>{
 	@Override
-	public boolean insert(Event object) {
+	public void insert(Event object) {
 
-		String sql = "INSERT INTO EVENT(EVENTID, NAME_EVENT, DATETIME_EVENT, TPYE_SPORTID)"
+		String sql = "INSERT INTO EVENT(EVENTID, NAME_EVENT, DATETIME_EVENT, TYPE_SPORTID)"
 				+ "VALUES(SQ_EVENT.NEXTVAL, ?, ?, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, object.getNameEvent());
 			statement.setTimestamp(2, object.getTimestamp());
 			statement.setInt(3, object.getTypeSportId());			
-			result = statement.execute();
+			statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -38,7 +37,6 @@ public class EventDAO implements GenericDao<Event, Integer>{
 				e.printStackTrace();
 			}
 		}
-		return result;
 	}
 
 	@Override

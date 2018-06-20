@@ -14,19 +14,18 @@ import com.jdbs.oracledb.OracleConnector;
 public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 
 	@Override
-	public boolean insert(TypeSport object) {
+	public void insert(TypeSport object) {
 
 		String sql = "INSERT INTO TYPE_SPORT(TYPEID, TYPE_NAME)"
 				+ "VALUES(SQ_TYPE_SPORT.NEXTVAL, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, object.getTypeName());
-			result = statement.execute();
+			statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -38,7 +37,6 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 					e.printStackTrace();
 				}
 		}
-		return result;
 	}
 
 	@Override
@@ -134,7 +132,7 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 	
 	@Override
 	public TypeSport getByKey(Integer object) {
-		String sql = "SELECT * FROM TYPE_SPORT";
+		String sql = "SELECT * FROM TYPE_SPORT WHERE TYPEID=?";
 
 		TypeSport type = null;
 		Connection connection = null;
@@ -143,6 +141,7 @@ public class TypeSportDAO implements GenericDao<TypeSport, Integer>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
+			statement.setInt(1, object);
 			result = statement.executeQuery();		
 			type = parseResultSet(result).get(0);
 		} catch(SQLException e) {

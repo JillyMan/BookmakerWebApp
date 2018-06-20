@@ -14,19 +14,18 @@ import com.jdbs.oracledb.OracleConnector;
 public class TeamDAO implements GenericDao<Team, Integer>{
 
 	@Override
-	public boolean insert(Team object) {
+	public void insert(Team object) {
 
-		String sql = "INSERT INTO TEAMS(TYPEID, TEAMNAME)"
+		String sql = "INSERT INTO TEAMS(TEAMID, TEAMNAME)"
 				+ "VALUES(SQ_TEAMS.NEXTVAL, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, object.getNameTeam());
-			result = statement.execute();
+			statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -38,14 +37,13 @@ public class TeamDAO implements GenericDao<Team, Integer>{
 					e.printStackTrace();
 				}
 		}
-		return result;
 	}
 
 	@Override
 	public void update(Team object) {
 		String sql = "UPDATE TEAMS SET "
 					+ "TEAMNAME=? "
-					+ "WHERE TYPEID=?";
+					+ "WHERE TEAMID=?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -54,6 +52,7 @@ public class TeamDAO implements GenericDao<Team, Integer>{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, object.getNameTeam());
+			statement.setInt(2, object.getId());
 			statement.execute();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -69,7 +68,7 @@ public class TeamDAO implements GenericDao<Team, Integer>{
 
 	@Override
 	public void delete(Team object) {
-		String sql = "DELETE FROM TEAMS WHERE TYPEID=?";
+		String sql = "DELETE FROM TEAMS WHERE TEAMID=?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;		
@@ -135,7 +134,7 @@ public class TeamDAO implements GenericDao<Team, Integer>{
 	
 	@Override
 	public Team getByKey(Integer object) {
-		String sql = "SELECT * FROM TEAMS";
+		String sql = "SELECT * FROM TEAMS WHERE TEAMID=?";
 
 		Team type = null;
 		Connection connection = null;
@@ -144,6 +143,7 @@ public class TeamDAO implements GenericDao<Team, Integer>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
+			statement.setInt(1, object);
 			result = statement.executeQuery();		
 			type = parseResultSet(result).get(0);
 		} catch(SQLException e) {

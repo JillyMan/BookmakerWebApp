@@ -3,7 +3,7 @@ package com.jdbs.interfaces;
 import java.util.List;
 
 public interface GenericDao<Type, PK> {
-	public boolean insert(Type object);
+	public void insert(Type object);
 	public void update(Type object);
 	public void delete(Type object);
 

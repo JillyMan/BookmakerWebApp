@@ -13,14 +13,13 @@ import com.jdbs.oracledb.OracleConnector;
 
 public class UserDAO implements GenericDao<User, String>{
 
-	public boolean insert(User name) {
+	public void insert(User name) {
 						
 		String sql = "INSERT INTO USERS(USERID, FIRSTNAME, LASTNAME, SCORE, LOGIN, PASSWORD, ROLE)"
 				+ "VALUES(SQ_USERS.NEXTVAL, ?, ?, ?, ?, ?, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
@@ -31,7 +30,7 @@ public class UserDAO implements GenericDao<User, String>{
 			statement.setString(4, name.getLogin());
 			statement.setString(5, name.getPassword());
 			statement.setInt(6, 1);
-			result = statement.execute();
+			statement.execute();
 
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -44,7 +43,6 @@ public class UserDAO implements GenericDao<User, String>{
 					e.printStackTrace();
 				}
 		}
-		return result;
 	}
 
 	public User getByKey(String login) {

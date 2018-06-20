@@ -14,20 +14,19 @@ import com.jdbs.oracledb.OracleConnector;
 public class ContestDAO implements GenericDao<Contest, Integer>{
 	
 	@Override
-	public boolean insert(Contest object) {
+	public void insert(Contest object) {
 
 		String sql = "INSERT INTO CONTEST(EVENTID, TEAMID)"
 				+ "VALUES(?, ?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
-		boolean result = false;
 		try{
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, object.getEventId());
 			statement.setInt(2, object.getTeamId());
-			result = statement.execute();
+			statement.execute();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -39,7 +38,6 @@ public class ContestDAO implements GenericDao<Contest, Integer>{
 					e.printStackTrace();
 				}
 		}
-		return result;
 	}
 
 	@Override
