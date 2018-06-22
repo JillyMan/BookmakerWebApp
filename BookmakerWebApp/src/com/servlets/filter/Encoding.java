@@ -1,4 +1,4 @@
-package com.servlet.filter;
+package com.servlets.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -8,9 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-public class EncodingFilter implements Filter {
+public class Encoding implements Filter {
 
-    public EncodingFilter() {}
+    public Encoding() {}
 
 	public void destroy() {}
 	public void init(FilterConfig fConfig) throws ServletException {}

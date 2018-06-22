@@ -91,6 +91,34 @@ public class AllPlacedBetsDAO implements GenericDao<AllPlacedBets, Integer>{
 //		}		
 	} 	
 
+	public List<AllPlacedBets> getAllByKeyUserId(Integer userId) {
+		String sql = "SELECT * FROM ALL_BETS_PLACED_USERS WHERE USERID=?";
+
+		List<AllPlacedBets> list = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result  = null;
+
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, userId);
+			result = statement.executeQuery();	
+			list = parseResultSet(result);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {				
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();			
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}		
+		return list;
+	}
+	
 	@Override
 	public List<AllPlacedBets> getAll() {		
 		String sql = "SELECT * FROM ALL_BETS_PLACED_USERS";
@@ -137,30 +165,8 @@ public class AllPlacedBetsDAO implements GenericDao<AllPlacedBets, Integer>{
 	}
 	
 	@Override
-	public AllPlacedBets getByKey(Integer object) {
-		String sql = "SELECT * FROM ALL_BETS_PLACED_USERS";
-
-		AllPlacedBets type = null;
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet result  = null;
-
-		try {
-			connection = OracleConnector.getInstance().getConnection();
-			statement = connection.prepareStatement(sql);
-			result = statement.executeQuery();		
-			type = parseResultSet(result).get(0);
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {				
-				if(connection != null) connection.close();
-				if(statement != null) statement.close();
-				if(result != null) result.close();			
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}		
-		return type;
+	public AllPlacedBets getByKey(Integer Id) {
+		//TODO: JUST WRITE COMMENT :)
+		return null;
 	}
 }

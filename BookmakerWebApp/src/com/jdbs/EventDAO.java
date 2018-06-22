@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.domain.Event;
+import com.domain.TypeSport;
 import com.jdbs.interfaces.GenericDao;
 import com.jdbs.oracledb.OracleConnector;
 
@@ -121,6 +122,35 @@ public class EventDAO implements GenericDao<Event, Integer>{
 		return list;
 	}
 
+	public List<Event> getAllByDateAndSport(int typeid, String date) {		
+		String sql = "SELECT * FROM EVENT WHERE TO_CHAR(DATETIME_EVENT, 'YYYY:MM:DD') > ? AND TYPE_SPORTID=?";
+
+		List<Event> list = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result  = null;
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, date);
+			statement.setInt(2, typeid);			
+			result = statement.executeQuery();		
+			list = parseResultSet(result);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {				
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();			
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}	
+		
+		return list;
+	}
+	
 	private List<Event> parseResultSet(ResultSet result){
 		List<Event> list = new ArrayList<Event>();
 		try {
@@ -139,8 +169,8 @@ public class EventDAO implements GenericDao<Event, Integer>{
 	}
 	
 	@Override
-	public Event getByKey(Integer object) {
-		String sql = "SELECT * FROM EVENT";
+	public Event getByKey(Integer key) {
+		String sql = "SELECT * FROM EVENT WHERE EVENTID=?";
 
 		Event type = null;
 		Connection connection = null;
@@ -149,7 +179,8 @@ public class EventDAO implements GenericDao<Event, Integer>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			result = statement.executeQuery();		
+			statement.setInt(1, key);
+			result = statement.executeQuery();
 			type = parseResultSet(result).get(0);
 		} catch(SQLException e) {
 			e.printStackTrace();

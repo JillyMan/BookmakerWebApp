@@ -11,7 +11,7 @@ import com.domain.*;
 import com.jdbs.interfaces.GenericDao;
 import com.jdbs.oracledb.OracleConnector;
 
-public class UserDAO implements GenericDao<User, String>{
+public class UserDAO implements GenericDao<User, Integer>{
 
 	public void insert(User name) {
 						
@@ -45,8 +45,8 @@ public class UserDAO implements GenericDao<User, String>{
 		}
 	}
 
-	public User getByKey(String login) {
-		String sql = "SELECT * FROM USERS WHERE LOGIN = ?";
+	public User getByKey(Integer key) {
+		String sql = "SELECT * FROM USERS WHERE USERID= ?";
 
 		Connection connection  = null;
 		PreparedStatement statement = null;
@@ -55,10 +55,9 @@ public class UserDAO implements GenericDao<User, String>{
 		try {
 			connection = OracleConnector.getInstance().getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, login);
+			statement.setInt(1, key);
 			result = statement.executeQuery();
 			user = parseResultSet(result).get(0);
-
 		}catch(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -74,6 +73,64 @@ public class UserDAO implements GenericDao<User, String>{
 		return user;
 	}
 	
+	//TODO: REFACTORING.....
+	public boolean getByLogin(String login) {
+		String sql = "SELECT * FROM USERS WHERE LOGIN=?";
+
+		Connection connection  = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		User user = null;
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, login);
+			result = statement.executeQuery();
+
+			user = parseResultSet(result).get(0);
+		}catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}					
+		}
+		boolean res = (user != null);	
+		return res;
+	}
+
+	public User getByLoginAndPassword(String login, String password) {
+		String sql = "SELECT * FROM USERS WHERE LOGIN=? AND PASSWORD=?";
+
+		Connection connection  = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		User user = null;
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, login);
+			statement.setString(2, password);
+			result = statement.executeQuery();
+			user = parseResultSet(result).iterator().next();
+		}catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}					
+		}
+		
+		return user;
+	}
 	
 	@Override
 	public List<User> getAll() {
@@ -114,7 +171,7 @@ public class UserDAO implements GenericDao<User, String>{
 				user.setScore(result.getInt("SCORE"));
 				user.setRole(result.getInt("ROLE"));
 				list.add(user);
-			}
+			}				
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		

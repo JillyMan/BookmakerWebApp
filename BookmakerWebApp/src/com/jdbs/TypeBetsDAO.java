@@ -131,6 +131,33 @@ public class TypeBetsDAO implements GenericDao<TypeBets, Integer>{
 		return list;
 	}
 	
+	public TypeBets getByName(String name) {
+		String sql = "SELECT * FROM TYPE_BETS WHERE NAME_BETS=?";
+
+		TypeBets type = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result  = null;
+		try {
+			connection = OracleConnector.getInstance().getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			result = statement.executeQuery();		
+			type = parseResultSet(result).get(0);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {				
+				if(connection != null) connection.close();
+				if(statement != null) statement.close();
+				if(result != null) result.close();			
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return type;
+	}	
+	
 	@Override
 	public TypeBets getByKey(Integer object) {
 		String sql = "SELECT * FROM TYPE_BETS WHERE TYPEID=?";

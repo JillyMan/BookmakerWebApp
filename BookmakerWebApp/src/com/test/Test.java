@@ -1,14 +1,20 @@
 package com.test;
 
+import java.util.Date;
 import java.util.List;
 import java.sql.Connection;
 
+import com.businessLogic.BetBO;
+import com.businessLogic.HistoryBet;
+import com.businessLogic.UserBO;
 import com.domain.*;
 import com.domain.enums.Role;
 import com.domain.enums.StatusBets;
 import com.jdbs.*;
 import com.jdbs.interfaces.GenericDao;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Test {
 
@@ -24,7 +30,7 @@ public class Test {
 			System.out.println(l.toString());
 		}
 		
-		u = dao.getByKey("test9");
+		u = dao.getByKey(25);
 		System.out.println(u.toString());
 	}
 	
@@ -112,7 +118,7 @@ public class Test {
 	}	
 	
 	public static void main(String[] args) throws Exception {
-		Test test = new Test();		
+		//Test test = new Test();		
 		//test.users();
 		//test.typeSport();		
 		//test.typeBets();
@@ -121,6 +127,8 @@ public class Test {
 		//test.testEvent();
 		//test.testContest();
 		//test.testAllPlacedBets();
-
+		UserBO userBO = new UserBO();
+		List<HistoryBet> history = userBO.getHistoryByUserId(84);
+		
 	}	
 }

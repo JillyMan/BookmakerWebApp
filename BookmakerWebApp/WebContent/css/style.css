@@ -1,74 +1,63 @@
-body{
-	margin: 0;
-	background: #222;
-	font-family: 'Work Sans', sans-serif;
-	font-weight: 400;
+
+body {
+    background: #313842;
 }
 
-.container{
-	float:left;
-	width: 80%;
-	margin: 0 30px;
+.thead-bet {
+    border-radius: 20px;
+    color: white; 
+    background: #4A75B1;
 }
 
-header{
-	background: #55d6aa;
+.tbody-bet {
+    border-radius: 20px;
+
+    color: #000000; 
+    background-color: white;
 }
 
-header::after{
-	content: '';
-	display: table;
-	clear: both;
+.scrollable{
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;     
 }
 
-.logo{
-	float: left;
-	padding: 10px 0px;
+.btn {
+    text-align: left;
 }
 
-nav{
-	float: right;
+.btn-primary{ 
+    background-color: #222933;
+    border-color:  #222933;
+    width: 150px;
 }
 
-nav ul{
-	margin: 0;	
-	padding: 0;
-	list-style: none;
+
+div::-webkit-scrollbar {
+    width: 1em;
+}
+ 
+div::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+div::-webkit-scrollbar-thumb {
+  background-color: #4B5058;
+  outline: 1px solid slategrey;
 }
 
-nav li {
-	display: inline-block;
-	margin-left: 70px;
-	padding-top: 15px;
-
-	position: relative;
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 4fr 2fr; 
+    grid-auto-rows:minmax(100px, auto)
+    grid-gap:1em;
+    justify-content: end;  
+}
+.wrapper > div {
+    padding: 3px;
+    background: #222933;
 }
 
-nav a {
-	color: #444;
-	text-decoration: none;
-	text-transform: uppercase;
-	font-size: 14px;
-}
-
-nav	a:hover{
-	color: #000;
-}
-
-nav a::before {
-	content: '';
-	display: block;
-	height: 5px;
-	width: 100%;
-	background-color: #444; 
-	
-	position: absolute;
-	top: 0px;
-	width: 0%;
-
-	transition: all ease-in-out 80ms; 
-}
-
-nav	a:hover::before {
- 	width: 100%;
+.wrapper > div:nth-child(odd){
+    background: #222933;
 }
